@@ -1,34 +1,34 @@
 
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { usernameSchema,emailSchema,passwordSchema } from "./validate";
-import { jwt } from "jsonwebtoken";
+import { usernameSchema,emailSchema,passwordSchema } from "./validate.js";
+import  jwt  from "jsonwebtoken";
 
 const app = express();
 const port = 3000;
 const prisma = new PrismaClient();
-const secret_key = aditya5021;
+const secret_key = "aditya5021";
 
-app.use(express.json(req,res,next));
+app.use(express.json());
 
 function validateInput(req,res,next){
-    const [username,email,password] = req.body;
+    const {username,email,password} = req.body;
 
     const username_check = usernameSchema.safeParse(username);
     if( !username_check.success){
-        return res.json( {msg : "username length can't exceed 50 !"}  );
+        return res.status(400).json( {msg : "username length can't exceed 50 !"}  );
     }
 
-    const email_check = emailSchema(email);
+    const email_check = emailSchema.safeParse(email);
     if( !email_check.success){
-        return res.json({msg : "email is invalid !" });
+        return res.status(400).json({msg : "email is invalid !" });
     }
 
     const password_check = passwordSchema.safeParse(password);
     if( !password_check.success){
        let error_array = [];
-       password_check.error.errors.forEach( error => error_array.push(error)  );
-       return res.json( { msg : error_array } );
+       password_check.error.errors.forEach( error => error_array.push(error.message)  );
+       return res.status(400).json( { msg : error_array } );
     } 
 
     next();
@@ -36,7 +36,7 @@ function validateInput(req,res,next){
 
 app.post("/signup", validateInput , async ( req,res )=>{
 
-    const [username,email,password] = req.body;
+    const {username,email,password} = req.body;
 
     try{
 
@@ -49,13 +49,13 @@ app.post("/signup", validateInput , async ( req,res )=>{
 
         })
         console.log(response);
-        const userId = toString(response.id);
-        const username = response.username;
-        const payload = { id:userId , username:username };
+
+        const payload = { id:toString(response.id) , username:response.username };
         
         const token = jwt.sign(payload,secret_key);
         console.log(token);
-        return res.json( { token : token });
+
+        return res.json( { token : token, userId : response.id});
 
     }catch(error){
         console.log(error);

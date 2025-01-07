@@ -10,7 +10,7 @@ export default function SignUp(){
     const [password,serPassword] = useState("");
     const navigate = useNavigate();
 
-    async function handler(){
+    async function clickHandler(){
        
         try {
             const response  = await axios.post( "http://localhost:3000/signup",{
@@ -22,10 +22,8 @@ export default function SignUp(){
             });
 
 
-            if( !response ){
-                console.log(first)
-            }else{
-
+            if(  )
+              
             }
             
         } catch (error) { 
