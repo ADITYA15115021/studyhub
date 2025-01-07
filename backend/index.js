@@ -48,9 +48,14 @@ app.post("/signup", validateInput , async ( req,res )=>{
             }
 
         })
-        const userId = 
         console.log(response);
-        const token = jwt.sign()
+        const userId = toString(response.id);
+        const username = response.username;
+        const payload = { id:userId , username:username };
+        
+        const token = jwt.sign(payload,secret_key);
+        console.log(token);
+        return res.json( { token : token });
 
     }catch(error){
         console.log(error);
