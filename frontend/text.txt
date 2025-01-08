@@ -1,0 +1,125 @@
+
+
+//error in handle of next button;
+
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+
+export default function Quiz() {
+    const [questions, setQuestions] = useState([]);
+    const [userResponses, setUserResponses] = useState([]);
+    const [currIndex, setIndex] = useState(0);
+    const [error, setError] = useState(null);
+
+    const navigate = useNavigate();
+    const location = useLocation();
+    
+    // Add null check for location.state
+    const { limit, timeToSet } = location.state || {};
+
+    useEffect(() => {
+        // Guard clause to ensure limit exists
+        if (!limit) {
+            setError("Quiz parameters are missing");
+            return;
+        }
+
+        async function fetchQuestions() {
+            try {
+                const response = await axios.get("http://localhost:3000/fetch", {
+                    params: {
+                        limit,
+                        course: "networks"
+                    }
+                });
+
+                console.log(response.data.data);
+
+                if (response.data.data && Array.isArray(response.data.data)) {
+                    setQuestions(response.data.data);
+                    // Initialize userResponses array with nulls
+                    setUserResponses(new Array(response.data.length).fill(null));
+                } else {
+                    setError("Invalid data format received from server");
+                }
+            } catch (error) {
+                console.error("Error fetching questions:", error);
+                setError(error.message || "Failed to fetch questions");
+            }
+        }
+
+        fetchQuestions();
+    }, [limit]); // Add limit as a dependency
+
+    function handleNext(answer) {
+        setUserResponses(prev => {
+            const updated = [...prev];
+            updated[currIndex] = answer;
+            return updated;
+        });
+        setIndex(prev => (prev + 1) % questions.length);
+    }
+
+    function calculateScore() {
+        if (questions.length === 0) return;
+        
+        let score = 0;
+        userResponses.forEach((response, index) => {
+            if (response === questions[index].ans) {
+                score++;
+            }
+        });
+
+        navigate("/result", { state: { limit, userscore: score } });
+    }
+
+    if (error) {
+        return <div className="text-red-500 p-4">{error}</div>;
+    }
+
+    if (questions.length === 0) {
+        return <div className="p-4">Loading questions...</div>;
+    }
+
+    const currentQuestion = questions[currIndex];
+
+    return (
+        <div className="h-screen flex flex-col justify-center">
+            <div className="border border-black w-full h-64 flex flex-row justify-center">
+                <div className="w-1/2 h-84 border-2 border-blue-600 flex flex-col">
+                    <div className="h-24 border border-red-400 mb-4 px-4 pt-4">
+                        {currentQuestion?.question}
+                    </div>
+                    
+                    <div className="flex-1 border border-black flex flex-col justify-evenly">
+                        {currentQuestion?.options?.map((option, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => handleNext(option)}
+                                className="p-2 hover:bg-gray-100"
+                            >
+                                {option}
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="mt-4 border border-black flex flex-row justify-around">
+                        <button 
+                            onClick={calculateScore} 
+                            className="w-14 bg-gray-400 p-2 hover:bg-gray-500"
+                        >
+                            SUBMIT
+                        </button>
+                        <button 
+                            onClick={() => handleNext(null)} 
+                            className="w-14 bg-green-400 p-2 hover:bg-green-500"
+                        >
+                            NEXT
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}

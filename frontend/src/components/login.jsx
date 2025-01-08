@@ -16,16 +16,14 @@ export default function LogIn(){
        
         try {
             const response  = await axios.post( "http://localhost:3000/signup",{
-                data:{
-                    username: name,
-                    email : email,
-                    password:password
+                email : email,
+                password:password
                 }
-            });
+            );
 
 
             if( !response ){
-                console.log(first)
+                console.log()
             }else{
 
             }
@@ -38,25 +36,25 @@ export default function LogIn(){
 
     return(
         <>
-          <div className="h-screen flex flex-col justify-center">
+          <div className="bg-gray-100 h-screen flex flex-col justify-center">
             <div className="flex flex-row justify-center">
-                <div className="border flex flex-col">
+                <div className="border rounded-lg bg-white shadow-black shadow-lg flex flex-col">
 
-                    <div className="border rounded-sm m-8 flex justify-center items-center
+                    <div className="m-8 flex justify-center items-center
                                     text-4xl font-bold">
                         LOGIN
                     </div>
                     
-                    <div className="border flex flex-col">
+                    <div className="flex flex-col">
                       
                        <div className="m-2 ">
                           <label>EMAIL</label>
-                          <input className="border border-gray-300 rounded"></input>
+                          <input className="ml-14 border border-gray-300 rounded"></input>
                        </div>
 
                        <div className="m-2">
                           <label>PASSWORD</label>
-                          <input className="border border-gray-300 rounded"></input>
+                          <input className="ml-4 border border-gray-300 rounded"></input>
                        </div>
 
                        <div className="mt-4 mb-4 flex justify-center">
