@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 test.js
+text.txt
+supabaseClient.js

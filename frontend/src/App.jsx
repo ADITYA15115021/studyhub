@@ -1,13 +1,13 @@
 
 
 import { BrowserRouter,Routes,Route } from "react-router-dom"
-import SignUp from "./components/signup"
-import Home from "./components/home"
-import Test from "./components/test"
-import Newtork from "./components/network"
-import Quiz from "./components/quiz"
-import Result from "./components/result"
-import LogIn from "./components/login"
+import SignUp from "./pages/signup"
+import Home from "./pages/home"
+import Test from "./pages/test"
+import Newtork from "./pages/network"
+import Quiz from "./pages/quiz"
+import Result from "./pages/result"
+import LogIn from "./pages/login"
 
 function App() {
  

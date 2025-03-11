@@ -2,7 +2,7 @@
 import {z} from "zod";
 
 
-export const usernameSchema = z.string().optional?.max(50);
+export const usernameSchema = z.string().max(50);
 
 export const emailSchema = z.string().email();
 
