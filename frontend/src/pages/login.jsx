@@ -29,6 +29,7 @@ export default function LogIn(){
         console.log(res.data.message);
         setMessage("Login successful!");
         localStorage.setItem("token",res.data.token);
+        localStorage.setItem("userId",res.data.userId)
         setTimeout(() => navigate("/home"), 2000);
         })
         .catch(err => {

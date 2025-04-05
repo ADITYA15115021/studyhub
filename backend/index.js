@@ -45,12 +45,12 @@ function validateInput(req,res,next){
     next();
 }
 
-app.get("/",(req,res)=>{
-    console.log("Request received!")
-    return res.json({
-        msg : "hello!"
-    })
-})
+// app.get("/",(req,res)=>{
+//     console.log("Request received!")
+//     return res.json({
+//         msg : "hello!"
+//     })
+// })
 
 
 
@@ -254,7 +254,7 @@ app.post("/login", async (req, res) => {
     const payload = { id:toString(user.id) , username:user.username };
     const token = jwt.sign(payload,secret_key);
     console.log("jwt",token);
-    return res.json( {success :true, message : "verifaction successfull!", token : token});
+    return res.json( {success :true, message: "verifaction successfull!",userId: user.id, token: token});
     
   });
   
@@ -282,6 +282,45 @@ app.get("/fetch", async (req,res)=>{
     }
 
     
+})
+
+
+app.post("/submit-quiz",async (req,res)=>{
+
+    console.log("request for result submission received !");
+    
+    const {userId,subject,totalMarks,userScore} = req.body;
+    try {
+        const dbResponse = await prisma.testHistory.create({
+            data:{
+                userId:parseInt(userId),
+                subject:subject,
+                tolalMarks:totalMarks,
+                score:userScore
+            }
+        })
+        console.log(dbResponse);
+        return res.json({success:true,message:"quiz results updated successfully!"});
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+app.get("/get-result",async (req,res)=>{
+    console.log("request for get result is received !");
+    const userId = parseInt(req.query.userId);
+    try {
+        const dbResponse = await prisma.testHistory.findMany({
+            where:{
+                userId:userId
+            }
+        })
+        console.log(dbResponse);
+        return res.json({dbResponse});
+
+    } catch (error) {
+        console.log(error);
+    }
 })
 
 app.listen(port,()=>{console.log(`server running on port ${port}`)})

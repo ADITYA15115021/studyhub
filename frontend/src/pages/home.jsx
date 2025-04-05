@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 
 
 export default function Home(){
-
+    
+    const navigate = useNavigate();
     const token = localStorage.getItem("token");
     console.log(token);
     if(!token){
@@ -15,17 +17,27 @@ export default function Home(){
     }
     return(
         <>
-         <div className="px-4 h-16 border shadow-black shadow-md flex flex-row justify-between items-end">
+          
+          <div className="h-16 px-6 bg-white shadow-md flex items-center justify-between">
 
-            <div className="w-2/3  flex flex-row justify-evenly ">
-                <div className="underline">HOME</div>
-                <div className="underline hover:bg-gray-200">TEST</div>
-                <div>ABOUT US</div>
+            {/* Navigation links */}
+            <div className="flex gap-8 text-gray-800 font-semibold text-lg">
+                <div className="hover:text-blue-600 transition cursor-pointer">HOME</div>
+                <div onClick={()=>{navigate("/test")}} className="hover:text-blue-600 transition cursor-pointer">TEST</div>
+                <div onClick={()=>{navigate("/quiz-history")}} className="hover:text-blue-600 transition cursor-pointer">TEST HISTORY</div>
+                <div className="hover:text-blue-600 transition cursor-pointer">ABOUT US</div>
             </div>
 
-            <div>SIGN-OUT</div> 
-            
-         </div>
+            {/* Sign-out */}
+            <div onClick={()=>{
+                localStorage.removeItem("userId");
+                localStorage.removeItem("token");
+                navigate("/");
+            }} 
+            className="text-red-500 font-medium hover:text-red-600 cursor-pointer transition">
+                SIGN OUT
+            </div>
+            </div>
 
 
 

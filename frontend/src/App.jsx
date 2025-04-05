@@ -9,6 +9,7 @@ import Quiz from "./pages/quiz"
 import Result from "./pages/result"
 import LogIn from "./pages/login"
 import VerifyCode from "./pages/verifyCode"
+import QuizHistory from "./pages/QuizHistory.jsx"
 
 function App() {
  
@@ -25,6 +26,7 @@ function App() {
            <Route path = "/network" element={<Newtork/>}></Route>
            <Route path = "/quiz"    element ={<Quiz/>}></Route>
            <Route path = "/result"  element = {<Result/>} ></Route>
+           <Route path = "/quiz-history" element={<QuizHistory/>} ></Route>
          </Routes>
        </BrowserRouter>
      
