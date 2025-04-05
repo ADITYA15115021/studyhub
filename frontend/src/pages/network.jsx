@@ -8,14 +8,7 @@ export default function Newtork(){
     const [time,setTime] = useState(0);
     const navigate = useNavigate();
 
-    // function clickHandler( ){
-    //     navigate("/quiz", { state : { noq : number , timeToSet : time  } })
-    // }
-
-
-
-
-    return (
+   return (
         <> 
         
         <div className="border  h-screen bg-gray-100">

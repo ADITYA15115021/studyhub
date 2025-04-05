@@ -1,6 +1,18 @@
 
 
 export default function Home(){
+
+    const token = localStorage.getItem("token");
+    console.log(token);
+    if(!token){
+        return (
+            <>
+            <div className="h-screen flex justify-center items-center">
+               not logged in !
+            </div>
+            </>
+        )
+    }
     return(
         <>
          <div className="px-4 h-16 border shadow-black shadow-md flex flex-row justify-between items-end">
@@ -11,15 +23,13 @@ export default function Home(){
                 <div>ABOUT US</div>
             </div>
 
-            <div>ACCOUNT</div> 
+            <div>SIGN-OUT</div> 
             
          </div>
 
 
 
-         <div className="border ">
-
-         </div>
+        
         </>
     )
 }

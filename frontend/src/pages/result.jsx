@@ -4,7 +4,8 @@ import { useLocation } from "react-router-dom"
 export default function Result(){
 
     const location = useLocation();
-    const {limit,userscore} = location.state;
+    const data = location.state || {};
+    const { limit,userscore} = data;
 
     return (
         <>
@@ -29,14 +30,7 @@ export default function Result(){
 
                 </div>
 
-                <div className="ml-20 mt-20 border border-black">
-                    <div className="h-12 flex items-center px-10 ">WRONG QUESTIONS</div>
-                    {
-                        
-                    }
-
-                    
-                </div>
+               
          </div>
         </>
     )

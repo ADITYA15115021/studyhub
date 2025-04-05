@@ -1,14 +1,15 @@
 
 import axios from "axios"
 import { useState } from "react";
-import { data, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import messages from "../components/messages.js";
 import { useEffect } from "react";
-import {supabase} from "./supabaseClient.js";
+import {supabase} from "../supabaseClient.js";
 
 export default function SignUp(){
 
     const signInWithGoogle = async () => {
+        
         const { error } = await supabase.auth.signInWithOAuth({
           provider: "google",
           options: {
@@ -20,9 +21,9 @@ export default function SignUp(){
           }
     }    
 
-    const [name,setName]   = useState("");
+    const [username,setUsername]   = useState("");
     const [email,setEmail] = useState("");
-    const [password,serPassword] = useState("");
+    const [password,setPassword] = useState("");
 
     const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
     const [showMessage, setShowMessage] = useState(true);
@@ -44,19 +45,22 @@ export default function SignUp(){
     async function clickHandler(){
        
         try {
-            const response  = await axios.post( "http://localhost:3000/signup",{
-                data:{
-                    username: name,
+
+            console.log("signup button clicked!");
+            console.log(username,email,password);
+            const response = await axios.post( "http://localhost:3000/signup",{
+               
+                    username: username,
                     email : email,
                     password:password
                 }
-            });
+            );
+            console.log(response);
+            //navigating to code verification;
+            navigate("/verify-code",{ state : {email:email}});
+           
 
-
-            // if(  ){
-
-            }
-            catch (error) { 
+            }catch(error) { 
             console.log(error);
         }
 
@@ -72,7 +76,7 @@ export default function SignUp(){
 
                 <div className="h-screen flex flex-col justify-center">
                     <div className="flex flex-row justify-center">
-                        <div className="px-16 text-4xl font-bold">Your's one stop solution for exam preparation !</div>
+                        <div className="px-16 text-4xl font-bold">Your one stop solution for exam preparation !</div>
                     </div>
 
                     <div className={`mt-12 ml-16 flex flex-col justify-center 
@@ -106,20 +110,20 @@ export default function SignUp(){
                             <div className="flex flex-col">
                                 <div className="m-2">
                                     <label>USERNAME</label>
-                                <input className="border border-gray-300 rounded ml-4"></input>
+                                <input onChange={(e)=>{setUsername(e.target.value)}} className="border border-gray-300 rounded ml-4"></input>
                             </div>
 
                             <div className="m-2 ">
                                 <label>EMAIL</label>
-                                <input className="border border-gray-300 rounded ml-14"></input>
+                                <input onChange={(e)=>{setEmail(e.target.value)}} className="border border-gray-300 rounded ml-14"></input>
                             </div>
                             <div className="m-2">
                                 <label>PASSWORD</label>
-                                <input className="border border-gray-300 rounded ml-4"></input>
+                                <input onChange={(e)=>{setPassword(e.target.value)}} className="border border-gray-300 rounded ml-4"></input>
                             </div>
 
                             <div className="mt-4 mb-4 flex justify-center">
-                                <button onClick={signInWithGoogle} className="w-24 h-8 rounded-lg bg-black text-white">SIGNIN</button>
+                                <button onClick={clickHandler} className="w-24 h-8 rounded-lg bg-black text-white">SIGNUP</button>
                             </div>
 
                     </div> 
@@ -127,7 +131,7 @@ export default function SignUp(){
                     <div className="flex justify-center">OR</div>
 
                     <div className="m-4 w-full flex justify-center  ">
-                        <button className="border rounded-lg px-4 h-8 bg-gray-500 text-white ">SIGIN WITH GOOGLE</button>
+                        <button  onClick={signInWithGoogle} className="border rounded-lg px-4 h-8 bg-gray-500 text-white ">SIGIN WITH GOOGLE</button>
                     </div>
                 </div>
             </div>

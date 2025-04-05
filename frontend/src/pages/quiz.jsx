@@ -3,10 +3,14 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Quiz() {
+
     const [questions, setQuestions] = useState([]);
     const [userResponses, setUserResponses] = useState([]);
     const [currIndex, setIndex] = useState(0);
     const [error, setError] = useState(null);
+
+
+    const [clicked, setClicked] = useState(false);
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -23,7 +27,7 @@ export default function Quiz() {
                 const response = await axios.get("http://localhost:3000/fetch", {
                     params: {
                         limit : limit,
-                        course: "networks"
+                        subject: "network"
                     }
                 });
 
@@ -54,15 +58,26 @@ export default function Quiz() {
         setIndex(prev => (prev + 1) % questions.length);
     }
 
-    function calculateScore() {
+    async function calculateScore() {
         if (questions.length === 0) return;
         
         let score = 0;
         userResponses.forEach((response, index) => {
-            if (response === questions[index].ans) {
+            if (response === questions[index].answer) {
                 score++;
             }
         });
+
+        try {
+            await axios.post("http://localhost:3000/post_result",
+                {
+                    email:"",
+                    test_score:score,
+                }
+            );
+        } catch (error) {
+            console.log(error);
+        }
 
         navigate("/result", { state: { limit, userscore: score } });
     }
@@ -74,6 +89,8 @@ export default function Quiz() {
     if (questions.length === 0) {
         return <div className="p-4">Loading questions...</div>;
     }
+
+
 
     const currentQuestion = questions[currIndex];
 
@@ -91,11 +108,10 @@ export default function Quiz() {
                             <button
                                 key={idx}
                                 onClick={() => handleAnswer(option)}
-                                className={`w-full border shadow-md  bg-white p-2 hover:bg-gray-300 ${
-                                    userResponses[currIndex] === option ? 'bg-blue-100' : ''
-                                }`}
+                                className={`w-full border shadow-md hover:bg-gray-300 ${
+                                    userResponses[currIndex] === option ? 'bg-blue-400' : ''}`}
                             >
-                                {option}
+                                {option.toUpperCase()}
                             </button>
                         ))}
                     </div>

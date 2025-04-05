@@ -8,6 +8,7 @@ import Newtork from "./pages/network"
 import Quiz from "./pages/quiz"
 import Result from "./pages/result"
 import LogIn from "./pages/login"
+import VerifyCode from "./pages/verifyCode"
 
 function App() {
  
@@ -18,6 +19,7 @@ function App() {
          <Routes>
            <Route path = "/"        element={<SignUp/>}></Route>
            <Route path="/login"     element={<LogIn/> }></Route>
+           <Route path="/verify-code" element={<VerifyCode/>}></Route>
            <Route path = "/home"    element={<Home/>}></Route>
            <Route path = "/test"    element={<Test/>}></Route>
            <Route path = "/network" element={<Newtork/>}></Route>
