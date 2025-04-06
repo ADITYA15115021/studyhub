@@ -42,3 +42,10 @@ model Question{
   answer     String
 }
 
+model Article{
+  id     Int @id @default(autoincrement())
+  title  String
+  authorName String
+  content String
+  publishedAt DateTime @default(now())
+}

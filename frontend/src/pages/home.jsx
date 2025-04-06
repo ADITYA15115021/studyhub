@@ -1,11 +1,30 @@
-import { useNavigate } from "react-router-dom";
+// import { useEffect, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+import { Appbar } from "../components/AppBar";
+import { useArticles } from "../hooks";
+import { ArticleCard } from "../components/ArticleCard";
 
 
 export default function Home(){
     
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
     const token = localStorage.getItem("token");
     console.log(token);
+    //const username = localStorage.getItem("username");
+
+    const {loading,articles} = useArticles();
+        
+        console.log("in the aticles comp",articles);
+        if( loading ){
+           return (
+            <div className="h-screen flex justify-center items-center">
+               fetching the articles !
+            </div>
+           )
+        } 
+
+   
+
     if(!token){
         return (
             <>
@@ -15,29 +34,36 @@ export default function Home(){
             </>
         )
     }
+
     return(
         <>
+
+           <div className="">
+                   <Appbar />       
+           </div>
+
+             <div  className="flex justify-center">
+                       <div>
+                           {articles.map( (article,index) => <ArticleCard
+                               key={index}
+                               id={article.id}
+                               authorName={article.authorName || "Anonymous"}
+                               title={article.title}
+                               content={article.content}
+                               publishedDate={article.publishedDate}
+                           />)}
+                       </div>
+            </div>
+               
+
+
           
-          <div className="h-16 px-6 bg-white shadow-md flex items-center justify-between">
+         
 
-            {/* Navigation links */}
-            <div className="flex gap-8 text-gray-800 font-semibold text-lg">
-                <div className="hover:text-blue-600 transition cursor-pointer">HOME</div>
-                <div onClick={()=>{navigate("/test")}} className="hover:text-blue-600 transition cursor-pointer">TEST</div>
-                <div onClick={()=>{navigate("/quiz-history")}} className="hover:text-blue-600 transition cursor-pointer">TEST HISTORY</div>
-                <div className="hover:text-blue-600 transition cursor-pointer">ABOUT US</div>
-            </div>
 
-            {/* Sign-out */}
-            <div onClick={()=>{
-                localStorage.removeItem("userId");
-                localStorage.removeItem("token");
-                navigate("/");
-            }} 
-            className="text-red-500 font-medium hover:text-red-600 cursor-pointer transition">
-                SIGN OUT
-            </div>
-            </div>
+
+
+
 
 
 
@@ -45,3 +71,25 @@ export default function Home(){
         </>
     )
 }
+
+
+
+
+{/* <div className="h-16 px-6 bg-white shadow-md flex items-center justify-between">
+
+<div className="flex gap-8 text-gray-800 font-semibold text-lg">
+    <div className="hover:text-blue-600 transition cursor-pointer">HOME</div>
+    <div onClick={()=>{navigate("/test")}} className="hover:text-blue-600 transition cursor-pointer">TEST</div>
+    <div onClick={()=>{navigate("/quiz-history")}} className="hover:text-blue-600 transition cursor-pointer">TEST HISTORY</div>
+    <div className="hover:text-blue-600 transition cursor-pointer">ABOUT US</div>
+</div>
+
+<div onClick={()=>{
+    localStorage.removeItem("userId");
+    localStorage.removeItem("token");
+    navigate("/");
+}} 
+className="text-red-500 font-medium hover:text-red-600 cursor-pointer transition">
+    SIGN OUT
+</div>
+</div> */}

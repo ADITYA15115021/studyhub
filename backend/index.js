@@ -254,7 +254,7 @@ app.post("/login", async (req, res) => {
     const payload = { id:toString(user.id) , username:user.username };
     const token = jwt.sign(payload,secret_key);
     console.log("jwt",token);
-    return res.json( {success :true, message: "verifaction successfull!",userId: user.id, token: token});
+    return res.json( {success :true,message: "verifaction successfull!",userId: user.id, token: token,username:user.username});
     
   });
   
@@ -322,5 +322,42 @@ app.get("/get-result",async (req,res)=>{
         console.log(error);
     }
 })
+
+
+
+app.get("/get-articles-bulk",async (req,res)=>{
+
+    console.log("request received for articles-bulk!")
+    try {
+        const dbResponse = await prisma.article.findMany();
+        
+        dbResponse.map((record,ind)=>{
+            console.log(record.title);
+        } );
+
+        return res.json({dbResponse});
+    }catch (error) {
+        console.log(error);
+    }
+})
+
+
+app.get("/get-article/:id",async (req,res)=>{
+
+    console.log("request for article id received!")
+
+    const id = parseInt(req.params.id);
+    try {
+        const dbResponse = await prisma.article.findUnique({
+            where: { id  : id }
+        });
+    console.log(dbResponse);    
+    return res.json({dbResponse});
+    }catch (error) {
+        console.log(error);
+    }
+})
+
+
 
 app.listen(port,()=>{console.log(`server running on port ${port}`)})
