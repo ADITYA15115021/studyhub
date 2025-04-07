@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "jest": "^29.7.0",
+    "selenium-webdriver": "^4.31.0"
+  }
+}

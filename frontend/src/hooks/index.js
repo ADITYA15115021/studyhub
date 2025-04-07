@@ -8,7 +8,7 @@ export  function useArticles(){
     useEffect(()=>{
         async function fetchArticles(){
             const response = await axios.get("http://localhost:3000/get-articles-bulk");
-            console.log("in useAticles hook",response.data.dbResponse); 
+            //console.log("in useAticles hook",response.data.dbResponse); 
             setArticles(response.data.dbResponse);
             setLoading(false);
         }
@@ -32,7 +32,7 @@ export function useArticle({id}){
 
             try {
                 const response = await axios.get(`http://localhost:3000/get-article/${id}`);
-                console.log("in useArticle",response.data.dbResponse);
+                //console.log("in useArticle",response.data.dbResponse);
                 setArticle(response.data.dbResponse);
                 setLoading(false);
                 

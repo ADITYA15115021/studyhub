@@ -2,17 +2,18 @@
 
 const messages = [
     {
-        name : "Aman",
-        msg : "really hepled in my journey !"
+      name: "Dhairya",
+      msg: "This platform genuinely helped me throughout my journey. Grateful for the support and valuable insights!"
     },
     {
-        name : "Anshul",
-        msg : "my partned in my endeavour!"
+      name: "Preyansh",
+      msg: "A true companion in my learning adventure." 
     },
-    {
-        name : "Rohan",
-        msg :  "blogs are well written and proved to be helpful!"
-    },
-]
+    {    
+      name: "Anshul",
+      msg: "The articles are not only well-written but also incredibly informative."
+    }
+  ];
+  
 
 export default messages;

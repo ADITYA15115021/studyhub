@@ -27,7 +27,7 @@ export default function LogIn(){
         axios.post('http://localhost:3000/login', { email, password })
         .then(res => {
         console.log(res.data.message);
-        setMessage("Login successful!");
+        setMessage("Login successfull!");
         localStorage.setItem("token",res.data.token);
         localStorage.setItem("userId",res.data.userId);
         localStorage.setItem("username",res.data.username);
@@ -48,22 +48,24 @@ export default function LogIn(){
         <>
 
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+
           <div className="bg-white shadow-lg rounded-xl p-8 w-80">
             
                 <h2 className="text-3xl font-bold text-center mb-6 text-gray-800">LOGIN</h2>
 
                 <div className="space-y-4">
-                <div>
-                    <label className="block text-sm text-gray-600 mb-1">Email</label>
-                    <input onChange={(e)=>{ setEmail(e.target.value) }} type="email" className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400" />
-                </div>
+                    <div>
+                        <label className="block text-sm text-gray-600 mb-1">Email</label>
+                        <input  id="email" onChange={(e)=>{ setEmail(e.target.value) }} type="email" className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400" />
+                    </div>
 
-                <div>
-                    <label className="block text-sm text-gray-600 mb-1">Password</label>
-                    <input onChange={(e)=>{ setPassword(e.target.value) }} type="password" className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400" />
-                </div>
+                    <div>
+                        <label className="block text-sm text-gray-600 mb-1">Password</label>
+                        <input id="password" onChange={(e)=>{ setPassword(e.target.value) }} type="password" className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400" />
+                    </div>
 
                 <button
+                id="loginbtn"
                     onClick={clickHandler}
                     disabled={loading}
                     className={`w-full py-2 rounded-md transition ${
@@ -77,6 +79,7 @@ export default function LogIn(){
 
                 {message && (
                     <p
+                    id="loginMessage"
                     className={`text-center text-sm ${
                         message.includes("successful") ? "text-green-600" : "text-red-500"
                     }`}

@@ -240,10 +240,10 @@ app.post("/login", async (req, res) => {
     })
     if (!user) {
         console.log("user does not exist!");
-      return res.status(400).json({ success:false,message: 'Email does not exist' });
+      return res.status(400).json({ success:false,message: 'user does not exist!' });
     }
   
-    const isValid = bcrypt.compare(password,user.password);
+    const isValid = await bcrypt.compare(password,user.password);
     if (!isValid) {
         console.log("password is invalid!");
       return res.status(401).json({ success:false,message: 'Incorrect password' });

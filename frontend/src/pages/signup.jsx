@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import messages from "../components/messages.js";
 import { useEffect } from "react";
 import {supabase} from "../supabaseClient.js";
+import { usernameSchema,emailSchema,passwordSchema } from "../components/validate.js";
+
 
 export default function SignUp(){
 
@@ -21,9 +23,15 @@ export default function SignUp(){
           }
     }    
 
+    const [loading,setLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
     const [username,setUsername]   = useState("");
     const [email,setEmail] = useState("");
     const [password,setPassword] = useState("");
+
+    const [error,setError] = useState(false);
+    const [errorMessage,setErrorMessage] = useState("");
 
     const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
     const [showMessage, setShowMessage] = useState(true);
@@ -45,9 +53,43 @@ export default function SignUp(){
     async function clickHandler(){
        
         try {
-
+            setLoading(true);
             console.log("signup button clicked!");
             console.log(username,email,password);
+
+            //validating the user input
+
+            const username_check = usernameSchema.safeParse(username);
+            if( !username_check.success){
+                console.log("username is invalid!");
+                console.log(username_check.error.issues[0].message);
+                setError(true);
+                setErrorMessage(username_check.error.issues[0].message);
+                setLoading(false);
+                return;
+                }
+            
+            const email_check = emailSchema.safeParse(email);
+            if( !email_check.success){
+                console.log("username is invalid!");
+                console.log(email_check.error.issues[0].message);
+                setError(true);
+                setErrorMessage(email_check.error.issues[0].message);
+                setLoading(false);
+                return;
+            }
+            
+            const password_check = passwordSchema.safeParse(password);
+            if( !password_check.success){
+                console.log("username is invalid!");
+                console.log(password_check.error.issues[0].message);
+                setError(true);
+                setErrorMessage(password_check.error.issues[0].message);
+                setLoading(false);
+                return;
+            }   
+
+
             const response = await axios.post( "http://localhost:3000/signup",{
                
                     username: username,
@@ -57,6 +99,7 @@ export default function SignUp(){
             );
             console.log(response);
             //navigating to code verification;
+
             navigate("/verify-code",{ state : {email:email}});
            
 
@@ -65,6 +108,8 @@ export default function SignUp(){
         }
 
     }
+
+
 
     return(
         <>
@@ -92,54 +137,108 @@ export default function SignUp(){
 
             <div className=" w-full md:w-1/2 ">
 
-                <div className="bg-gray-100 h-screen flex flex-col justify-center">
-                    <div className="flex flex-row justify-center">
+                <div className="bg-gray-100 min-h-screen flex items-center justify-center py-12">
 
-                        <div className="rounded-lg shadow-black shadow-lg border-white bg-white flex flex-col">
+                    
+
+                        <div className="rounded-xl shadow-lg flex flex-col bg-white p-8 w-80 ">
 
                             <div className="rounded-sm m-8 flex justify-center items-center
                                         text-4xl font-bold">
                                 SIGNUP
                             </div>
 
-                            < div className="flex justify-center">
+                            
+                            < div className="flex justify-center block text-sm text-gray-600 mb-4 ">
                                already have an account ?
                               <a href="/login" className="text-blue-500  hover:text-blue-700"> Click here</a>
                             </div>
-                        
-                            <div className="flex flex-col">
-                                <div className="m-2">
-                                    <label>USERNAME</label>
-                                <input onChange={(e)=>{setUsername(e.target.value)}} className="border border-gray-300 rounded ml-4"></input>
-                            </div>
 
-                            <div className="m-2 ">
-                                <label>EMAIL</label>
-                                <input onChange={(e)=>{setEmail(e.target.value)}} className="border border-gray-300 rounded ml-14"></input>
-                            </div>
-                            <div className="m-2">
-                                <label>PASSWORD</label>
-                                <input onChange={(e)=>{setPassword(e.target.value)}} className="border border-gray-300 rounded ml-4"></input>
-                            </div>
+                            <div className="space-y-4">
+                                
+                                <div>
+                                    <label className="block text-sm text-gray-600 mb-1">USERNAME</label>
+                                    <input 
+                                    id="username" 
+                                    onChange={(e)=>{ setUsername(e.target.value) }} type="text" 
+                                    className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-none 
+                                    focus:ring-2 focus:ring-gray-400" />
+                                </div>
 
-                            <div className="mt-4 mb-4 flex justify-center">
-                                <button onClick={clickHandler} className="w-24 h-8 rounded-lg bg-black text-white">SIGNUP</button>
-                            </div>
+                                <div>
+                                    <label className="block text-sm text-gray-600 mb-1">Email</label>
+                                    <input  id="email" 
+                                    onChange={(e)=>{ setEmail(e.target.value) }} type="email" 
+                                    className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-none 
+                                    focus:ring-2 focus:ring-gray-400" />
+                                </div>
 
-                    </div> 
+                                <div>
+                                    <label className="block text-sm text-gray-600 mb-1">Password</label>
+                                    <input
+                                        id="password"
+                                        type={showPassword ? "text" : "password"}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        className="w-full px-3 py-2 border rounded-md border-gray-300 
+                                        focus:outline-none focus:ring-2 focus:ring-gray-400"
+                                    />
+                                     <p className="text-xs text-gray-500 mt-1 ml-1">
+                                            Must contain at least one special character, a number, and be 8+ characters.
+                                    </p>
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="text-xs text-blue-500 mt-1"
+                                        >
+                                        {showPassword ? "Hide password" : "Show password"}
+                                        </button>
 
-                    <div className="flex justify-center">OR</div>
 
-                    <div className="m-4 w-full flex justify-center  ">
-                        <button  onClick={signInWithGoogle} className="border rounded-lg px-4 h-8 bg-gray-500 text-white ">SIGIN WITH GOOGLE</button>
-                    </div>
+                                </div>
+
+                                <button
+                                    id="signupbtn"
+                                        onClick={clickHandler}
+                                        disabled={loading}
+                                        className={`w-full py-2 rounded-md transition ${
+                                        loading
+                                            ? "bg-gray-400 cursor-not-allowed"
+                                            : "bg-gray-800 hover:bg-gray-700 text-white"
+                                        }`}
+                                    >
+                                        {loading ? "Signing In..." : "SIGNUP"}
+                                </button>
+
+                                {
+                                    error  && <p  id="signupMessage" 
+                                    className="text-center text-xs text-red-700">{errorMessage.toUpperCase()}</p>
+                                }
+
+                                <div className="flex justify-center">OR</div>
+
+                                
+                                <button  onClick={signInWithGoogle}
+                                    disabled={loading}
+                                    className={`w-full py-2 rounded-md transition ${
+                                        loading ? "bg-gray-400 cursor-not-allowed"
+                                               : "bg-gray-800 hover:bg-gray-700 text-white"}`} >
+                                    SIGIN WITH GOOGLE
+                                    </button>
+                               
+
+
+                            </div> 
+
+                   
+
+                  
                 </div>
             </div>
           </div>
 
         </div>
 
-    </div>
+    
          
 
         

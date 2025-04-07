@@ -10,20 +10,9 @@ export default function Home(){
     //const navigate = useNavigate();
     const token = localStorage.getItem("token");
     console.log(token);
-    //const username = localStorage.getItem("username");
-
     const {loading,articles} = useArticles();
-        
-        console.log("in the aticles comp",articles);
-        if( loading ){
-           return (
-            <div className="h-screen flex justify-center items-center">
-               fetching the articles !
-            </div>
-           )
-        } 
-
-   
+    console.log("in the aticles comp",articles);
+    //const username = localStorage.getItem("username");
 
     if(!token){
         return (
@@ -34,6 +23,19 @@ export default function Home(){
             </>
         )
     }
+
+    
+    if( loading ){
+           return (
+            <div className="h-screen flex justify-center items-center">
+               fetching the articles !
+            </div>
+           )
+        } 
+
+   
+
+   
 
     return(
         <>

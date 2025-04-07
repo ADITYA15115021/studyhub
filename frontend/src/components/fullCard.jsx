@@ -5,7 +5,7 @@
 export const FullArticleCard = ({article}) => {
 
     //const authorName = article.authorName || "Anonymous"; // Safely check if blog.author exists
-    console.log(article);
+    //console.log(article);
     // const currentDate = new Date().toLocaleDateString('en-GB', {
     //     day: 'numeric',
     //     month: 'short',
