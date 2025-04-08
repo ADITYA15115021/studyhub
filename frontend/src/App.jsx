@@ -12,6 +12,7 @@ import VerifyCode from "./pages/verifyCode"
 import QuizHistory from "./pages/QuizHistory.jsx"
 import Articles from "./pages/articles.jsx"
 import { Article } from "./pages/article.jsx"
+import AuthCallback from "./pages/auth.jsx"
 
 function App() {
  
@@ -21,6 +22,7 @@ function App() {
        <BrowserRouter>
          <Routes>
            <Route path = "/"            element={<SignUp/>}></Route>
+           <Route path = "/auth/callback" element={<AuthCallback/>}></Route>
            <Route path="/login"         element={<LogIn/> }></Route>
            <Route path="/verify-code"   element={<VerifyCode/>}></Route>
            <Route path = "/home"        element={<Home/>}></Route>

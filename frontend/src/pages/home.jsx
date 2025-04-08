@@ -1,12 +1,12 @@
-// import { useEffect, useState } from "react";
-// import { useNavigate } from "react-router-dom";
 import { Appbar } from "../components/AppBar";
 import { useArticles } from "../hooks";
 import { ArticleCard } from "../components/ArticleCard";
+import { Spinner } from "../components/Spinner";
 
 
 export default function Home(){
-    
+
+   
     //const navigate = useNavigate();
     const token = localStorage.getItem("token");
     console.log(token);
@@ -28,7 +28,7 @@ export default function Home(){
     if( loading ){
            return (
             <div className="h-screen flex justify-center items-center">
-               fetching the articles !
+               <Spinner/>
             </div>
            )
         } 

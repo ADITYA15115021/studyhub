@@ -24,7 +24,7 @@ export default function LogIn(){
         setLoading(true);
         setMessage("");
        
-        axios.post('http://localhost:3000/login', { email, password })
+        axios.post('https://ak-backend1.xyz/login', { email, password })
         .then(res => {
         console.log(res.data.message);
         setMessage("Login successfull!");

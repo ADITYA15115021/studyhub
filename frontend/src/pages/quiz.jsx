@@ -26,7 +26,7 @@ export default function Quiz() {
 
         async function fetchQuestions() {
             try {
-                const response = await axios.get("http://localhost:3000/fetch", {
+                const response = await axios.get("https://ak-backend1.xyz/fetch", {
                     params: {
                         limit : limit,
                         subject: "network"
@@ -90,7 +90,7 @@ export default function Quiz() {
         });
         
         try {
-            await axios.post("http://localhost:3000/submit-quiz",
+            await axios.post("https://ak-backend1.xyz/submit-quiz",
                 {
 
                     userId:userId,

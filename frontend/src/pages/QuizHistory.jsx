@@ -1,26 +1,37 @@
 import axios from "axios";
 import { useEffect, useState } from "react"
+import { Spinner } from "../components/Spinner";
 
 
 export default function QuizHistory(){
 
     const userId = localStorage.getItem("userId");
      const [history,setHistory] = useState([]);
+     const [loading,setLoading] = useState(true);
 
     useEffect(() => {
 
         if(!userId)return;
 
         async function fetchRecords() {
-            const response = await axios.get("http://localhost:3000/get-result",{
+            const response = await axios.get("https://ak-backend1.xyz/get-result",{
                 params : {userId}
             });
             setHistory(response.data.dbResponse);
+            setLoading(false);
         }
 
         fetchRecords();
        
     },[userId])
+
+    if( loading ){
+       return (
+        <div className="h-screen flex justify-center items-center">
+          <Spinner/>
+        </div>
+       )
+    } 
 
     return (
         <div className="min-h-screen bg-gray-100 px-4 py-10">

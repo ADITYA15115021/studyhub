@@ -15,7 +15,7 @@ export default function SignUp(){
         const { error } = await supabase.auth.signInWithOAuth({
           provider: "google",
           options: {
-            redirectTo: "http://localhost:5173/landing", // Change this to your desired route
+            redirectTo: "http://localhost:5173/auth/callback", // Change this to your desired route
           },
         });
         if (error) {
@@ -32,6 +32,10 @@ export default function SignUp(){
 
     const [error,setError] = useState(false);
     const [errorMessage,setErrorMessage] = useState("");
+
+    const [serverError,setServerError] = useState(false);
+    const [serverErrorMessage,setServerErrorMessage] = useState("");
+
 
     const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
     const [showMessage, setShowMessage] = useState(true);
@@ -71,7 +75,7 @@ export default function SignUp(){
             
             const email_check = emailSchema.safeParse(email);
             if( !email_check.success){
-                console.log("username is invalid!");
+                console.log("email is invalid!");
                 console.log(email_check.error.issues[0].message);
                 setError(true);
                 setErrorMessage(email_check.error.issues[0].message);
@@ -81,7 +85,7 @@ export default function SignUp(){
             
             const password_check = passwordSchema.safeParse(password);
             if( !password_check.success){
-                console.log("username is invalid!");
+                console.log("password is invalid!");
                 console.log(password_check.error.issues[0].message);
                 setError(true);
                 setErrorMessage(password_check.error.issues[0].message);
@@ -90,7 +94,7 @@ export default function SignUp(){
             }   
 
 
-            const response = await axios.post( "http://localhost:3000/signup",{
+            const response = await axios.post( "https://ak-backend1.xyz/signup",{
                
                     username: username,
                     email : email,
@@ -98,13 +102,17 @@ export default function SignUp(){
                 }
             );
             console.log(response);
+            setLoading(false);
             //navigating to code verification;
 
             navigate("/verify-code",{ state : {email:email}});
            
 
             }catch(error) { 
-            console.log(error);
+            console.log(error.response.data.message);
+            setServerError(true);
+            setServerErrorMessage(error.response.data.message);
+            setLoading(false);
         }
 
     }
@@ -183,7 +191,7 @@ export default function SignUp(){
                                         focus:outline-none focus:ring-2 focus:ring-gray-400"
                                     />
                                      <p className="text-xs text-gray-500 mt-1 ml-1">
-                                            Must contain at least one special character, a number, and be 8+ characters.
+                                        Password must be at least 8 characters long, must conatain ataleat one character, digit and special character.
                                     </p>
                                     <button
                                         type="button"
@@ -213,6 +221,13 @@ export default function SignUp(){
                                     error  && <p  id="signupMessage" 
                                     className="text-center text-xs text-red-700">{errorMessage.toUpperCase()}</p>
                                 }
+
+{
+                                    serverError  && <p  id="signupMessage" 
+                                    className="text-center text-xs text-red-700">{serverErrorMessage.toUpperCase()}</p>
+                                }
+
+
 
                                 <div className="flex justify-center">OR</div>
 
